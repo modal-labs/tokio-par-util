@@ -1,4 +1,4 @@
-# `tokio-par-utils`
+# `tokio-par-util`
 
 > Utilities for running computations in parallel on top of Tokio
 

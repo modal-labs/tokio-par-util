@@ -1,4 +1,4 @@
-//! # `tokio-par-utils`: Utilities for running computations in parallel on top of Tokio.
+//! # `tokio-par-util`: Utilities for running computations in parallel on top of Tokio.
 //!
 //! This library adds utility methods and stream transformers to [`Stream`]s and
 //! [`TryStream`]s, to make it easier to run many futures in parallel while
