@@ -1,7 +1,13 @@
 [package]
 name = "tokio-par-util"
+description = "Utilities for running computations in parallel on top of Tokio"
+keywords = ["tokio", "futures", "parallelism", "structured", "stream"]
+categories = ["asynchronous", "concurrency", "data-structures", "rust-patterns"]
+repository = "https://github.com/modal-labs/tokio-par-util"
+readme = "README.md"
 version = "0.1.0"
 edition = "2021"
+license = "Apache-2.0"
 
 [dependencies]
 futures-util = "0.3.31"
