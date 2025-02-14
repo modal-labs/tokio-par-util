@@ -28,11 +28,9 @@
 //! the output on a future that is slow to produce its result.
 //!
 //! ```rust
-//! use futures_util::stream;
-//! use futures_util::StreamExt as _;
+//! use futures_util::{stream, StreamExt as _};
 //! use std::collections::HashSet;
 //! use tokio_par_util::StreamParExt as _;
-//! use tokio_util::sync::CancellationToken;
 //!
 //! # #[tokio::main]
 //! # async fn main() {
@@ -63,12 +61,9 @@
 //! calling task:
 //!
 //! ```rust
-//! use futures_util::stream;
-//! use futures_util::StreamExt as _;
-//! use std::collections::HashSet;
+//! use futures_util::{stream, StreamExt as _};
 //! use tokio::task;
 //! use tokio_par_util::StreamParExt as _;
-//! use tokio_util::sync::CancellationToken;
 //!
 //! # #[tokio::main]
 //! # async fn main() {
@@ -105,8 +100,7 @@
 //! [Tokio official docs](https://tokio.rs/tokio/topics/shutdown) on the subject.
 //!
 //! ```rust
-//! use futures_util::stream;
-//! use futures_util::StreamExt as _;
+//! use futures_util::{stream, StreamExt as _};
 //! use std::collections::HashSet;
 //! use tokio_par_util::StreamParExt as _;
 //! use tokio_util::sync::CancellationToken;
@@ -139,9 +133,7 @@
 //! on some fallible computation.
 //!
 //! ```rust
-//! use futures_util::stream;
-//! use futures_util::TryStreamExt as _;
-//! use std::collections::HashSet;
+//! use futures_util::{stream, TryStreamExt as _};
 //! use tokio_par_util::TryStreamParExt as _;
 //!
 //! # #[tokio::main]
