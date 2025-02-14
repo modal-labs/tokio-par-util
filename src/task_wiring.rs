@@ -64,6 +64,8 @@ where
         }: TaskWiring<Fut>,
     ) -> JoinHandle<Option<Fut::Output>> {
         let future = RunUntilCancelled::new(cancellation_token, future);
+        #[cfg(feature = "tracing")]
+        let future = tracing::Instrument::in_current_span(future);
         task_tracker.spawn(future)
     }
 }
@@ -82,6 +84,8 @@ where
         }: TaskWiring<Fut>,
     ) -> JoinHandle<Option<Result<Fut::Ok, Fut::Error>>> {
         let future = RunUntilCancelled::new(cancellation_token, future.into_future());
+        #[cfg(feature = "tracing")]
+        let future = tracing::Instrument::in_current_span(future);
         task_tracker.spawn(future)
     }
 }
