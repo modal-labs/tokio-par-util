@@ -5,7 +5,7 @@ keywords = ["tokio", "futures", "parallelism", "structured", "stream"]
 categories = ["asynchronous", "concurrency", "data-structures", "rust-patterns"]
 repository = "https://github.com/modal-labs/tokio-par-util"
 readme = "README.md"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "Apache-2.0"
 
