@@ -1,0 +1,16 @@
+[package]
+name = "tokio-par-util"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures-util = "0.3.31"
+pin-project = "1.1.9"
+tokio = "1.43.0"
+tokio-util = { version = "0.7.13", features = ["rt"] }
+
+[dev-dependencies]
+anyhow = "1.0.95"
+dashmap = "6.1.0"
+scopeguard = "1.2.0"
+tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread"] }
