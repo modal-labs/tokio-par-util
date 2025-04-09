@@ -12,7 +12,7 @@ license = "Apache-2.0"
 [dependencies]
 futures-util = "0.3.31"
 pin-project = "1.1.9"
-tokio = "1.43.0"
+tokio = "1.43.1"
 tokio-util = { version = "0.7.13", features = ["rt"] }
 tracing = { version = "0.1.41", optional = true }
 
@@ -20,7 +20,7 @@ tracing = { version = "0.1.41", optional = true }
 anyhow = "1.0.95"
 dashmap = "6.1.0"
 scopeguard = "1.2.0"
-tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.43.1", features = ["macros", "rt-multi-thread"] }
 
 [features]
 tracing = ["dep:tracing"]
