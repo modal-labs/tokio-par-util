@@ -101,15 +101,18 @@ where
 mod tests {
     use std::collections::HashSet;
     use std::future;
+    use std::future::poll_fn;
+    use std::pin::pin;
     use std::sync::Arc;
 
-    use futures_util::{stream, StreamExt};
+    use futures_util::{stream, Stream, StreamExt};
     use scopeguard::defer;
     use tokio::sync::Semaphore;
     use tokio::task;
     use tokio_util::sync::CancellationToken;
 
     use crate::stream::StreamParExt;
+    use crate::try_stream::TryStreamParExt;
 
     #[tokio::test]
     async fn test_parallel_buffer_unordered() -> anyhow::Result<()> {
@@ -261,5 +264,35 @@ mod tests {
         assert_eq!(panic_msg, "allergic to the number 2");
 
         Ok(())
+    }
+
+    /// Regression test: TryParallelBuffer should not panic when poll_next is
+    /// called after it has returned Some(Err(...)). Previously, the internal
+    /// Wait future would be polled after completion, causing a panic with
+    /// "async fn resumed after completion".
+    #[tokio::test]
+    async fn test_try_parallel_buffer_unordered_no_panic_after_stream_error() {
+        // Create a stream that immediately yields an error
+        let input_stream = stream::iter([Err::<std::future::Ready<Result<u32, &str>>, _>(
+            "stream error",
+        )]);
+
+        let mut buffered = pin!(input_stream.try_parallel_buffer_unordered(4));
+
+        // Poll 1: Should get the stream error
+        let item1 = poll_fn(|cx| buffered.as_mut().poll_next(cx)).await;
+        assert!(
+            matches!(item1, Some(Err("stream error"))),
+            "expected Some(Err(\"stream error\")), got {:?}",
+            item1
+        );
+
+        // Poll 2: This previously caused a panic. Should now return None.
+        let item2 = poll_fn(|cx| buffered.as_mut().poll_next(cx)).await;
+        assert!(
+            item2.is_none(),
+            "expected None after error, got {:?}",
+            item2
+        );
     }
 }
