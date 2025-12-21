@@ -5,6 +5,7 @@ use std::pin::Pin;
 use std::sync::Arc;
 use std::task::{Context, Poll};
 
+use futures_util::future::{Fuse, FusedFuture, FutureExt};
 use futures_util::Stream;
 use futures_util::{TryFuture, TryStream};
 use tokio_util::sync::CancellationToken;
@@ -30,7 +31,7 @@ where
     #[pin]
     buffer: Option<TryFutBuffer>,
     #[pin]
-    wait: Wait,
+    wait: Fuse<Wait>,
     phantom: PhantomData<St>,
 }
 
@@ -72,7 +73,7 @@ where
 
         let buffer = Some(buffer);
 
-        let wait = Wait::new(Arc::clone(&task_tracker));
+        let wait = Wait::new(Arc::clone(&task_tracker)).fuse();
         let phantom = PhantomData;
 
         Self {
@@ -130,8 +131,10 @@ where
         this.task_tracker.close();
         this.cancellation_token.cancel();
 
-        // Optionally wait for cancelled tasks to finish
-        if *this.awaiting_completion {
+        // Optionally wait for cancelled tasks to finish.
+        // Use is_terminated() to avoid polling the Wait future after it has
+        // returned Ready, which would cause a panic.
+        if *this.awaiting_completion && !this.wait.is_terminated() {
             match this.wait.poll(cx) {
                 Poll::Ready(()) => (),
                 // Still waiting for clean-up to finish
